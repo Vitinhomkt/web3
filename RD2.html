@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Descrição de Produto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .form-group img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output-container {
+            margin-top: 20px;
+        }
+        .output-container textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editor de Descrição de Produto</h1>
+        <div class="form-group">
+            <label for="product-title">Título do Produto</label>
+            <input type="text" id="product-title" placeholder="Insira o título do produto">
+        </div>
+        <div class="form-group">
+            <label for="product-description">Descrição do Produto</label>
+            <textarea id="product-description" placeholder="Insira a descrição do produto"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="product-image1">URL da Imagem 1</label>
+            <input type="text" id="product-image1" placeholder="Insira a URL da imagem do produto">
+            <img id="preview-image1" src="" alt="Pré-visualização da Imagem 1">
+        </div>
+        <div class="form-group">
+            <label for="product-image2">URL da Imagem 2</label>
+            <input type="text" id="product-image2" placeholder="Insira a URL da imagem do produto">
+            <img id="preview-image2" src="" alt="Pré-visualização da Imagem 2">
+        </div>
+        <div class="form-group">
+            <label for="product-image3">URL da Imagem 3</label>
+            <input type="text" id="product-image3" placeholder="Insira a URL da imagem do produto">
+            <img id="preview-image3" src="" alt="Pré-visualização da Imagem 3">
+        </div>
+        <div class="form-group">
+            <label for="color">Cor</label>
+            <input type="text" id="color" placeholder="Insira a cor">
+        </div>
+        <div class="form-group">
+            <label for="size">Tamanho</label>
+            <input type="text" id="size" placeholder="Insira o tamanho">
+        </div>
+        <div class="form-group">
+            <label for="material">Material</label>
+            <input type="text" id="material" placeholder="Insira o material">
+        </div>
+        <div class="form-group">
+            <label for="model">Modelo</label>
+            <input type="text" id="model" placeholder="Insira o modelo">
+        </div>
+        <div class="form-group">
+            <label for="brand">Marca</label>
+            <input type="text" id="brand" placeholder="Insira a marca">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gênero</label>
+            <input type="text" id="gender" placeholder="Insira o gênero">
+        </div>
+        <div class="form-group">
+            <label for="print-details">Estampa/Detalhes</label>
+            <input type="text" id="print-details" placeholder="Insira a estampa ou detalhes">
+        </div>
+        <div class="form-group">
+            <label for="care-instructions">Cuidados de Lavagem</label>
+            <input type="text" id="care-instructions" placeholder="Insira os cuidados de lavagem">
+        </div>
+        <div class="form-group">
+            <label for="occasion">Ocasião</label>
+            <input type="text" id="occasion" placeholder="Insira a ocasião">
+        </div>
+        <div class="form-group">
+            <label for="price">Preço</label>
+            <input type="text" id="price" placeholder="Insira o preço">
+        </div>
+        <button id="preview-html">Pré-visualizar HTML</button>
+        <button id="generate-html">Gerar HTML</button>
+        <button id="copy-html">Copiar HTML</button>
+        <div class="output-container form-group">
+            <label for="generated-html">HTML Gerado</label>
+            <textarea id="generated-html" readonly></textarea>
+        </div>
+        <div class="output-container form-group">
+            <label for="preview-area">Pré-visualização</label>
+            <div id="preview-area" style="border: 1px solid #ccc; padding: 10px; border-radius: 4px;"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('product-image1').addEventListener('input', function() {
+            document.getElementById('preview-image1').src = this.value;
+        });
+        document.getElementById('product-image2').addEventListener('input', function() {
+            document.getElementById('preview-image2').src = this.value;
+        });
+        document.getElementById('product-image3').addEventListener('input', function() {
+            document.getElementById('preview-image3').src = this.value;
+        });
+
+        function generateHTML() {
+            const title = document.getElementById('product-title').value;
+            const description = document.getElementById('product-description').value;
+            const image1 = document.getElementById('product-image1').value;
+            const image2 = document.getElementById('product-image2').value;
+            const image3 = document.getElementById('product-image3').value;
+            const color = document.getElementById('color').value;
+            const size = document.getElementById('size').value;
+            const material = document.getElementById('material').value;
+            const model = document.getElementById('model').value;
+            const brand = document.getElementById('brand').value;
+            const gender = document.getElementById('gender').value;
+            const printDetails = document.getElementById('print-details').value;
+            const careInstructions = document.getElementById('care-instructions').value;
+            const occasion = document.getElementById('occasion').value;
+            const price = document.getElementById('price').value;
+
+            const infoTecnicas = [
+                color ? `<li><b>Cor:</b> ${color}</li>` : '',
+                size ? `<li><b>Tamanho:</b> ${size}</li>` : '',
+                material ? `<li><b>Material:</b> ${material}</li>` : '',
+                model ? `<li><b>Modelo:</b> ${model}</li>` : '',
+                brand ? `<li><b>Marca:</b> ${brand}</li>` : '',
+                gender ? `<li><b>Gênero:</b> ${gender}</li>` : '',
+            ].filter(Boolean).join('');
+
+            const porqueApostar = [
+                printDetails ? `<li><b>Estampa/Detalhes:</b> ${printDetails}</li>` : '',
+                careInstructions ? `<li><b>Cuidados de Lavagem:</b> ${careInstructions}</li>` : '',
+                occasion ? `<li><b>Ocasião:</b> ${occasion}</li>` : '',
+                price ? `<li><b>Preço:</b> ${price}</li>` : '',
+            ].filter(Boolean).join('');
+
+            const generatedHTML = `
+<style>
+    .content-product{width:100%;max-width:900px;margin:0 auto;padding:0 15px;}
+    .grid-area{display:grid;align-items:center;grid-template-columns:1fr 1fr;}
+    .banner-tec{display:grid;align-items:center;grid-template-columns:1fr 1fr 1fr;}
+    .content-product strong{font-weight:bold;}
+
+    @media (max-width:767px){
+        .grid-area, 
+        .banner-tec{grid-template-columns:1fr;margin-bottom:20px;}
+        .order1{order:1;}
+    }
+    table {
+        border-collapse: collapse;
+        border: 2px solid rgb(237 238 242);
+        letter-spacing: 1px;
+        width: 50% !important; 
+        margin: auto;
+        text-align: center;
+    }
+
+    thead, tfoot {
+        background-color: rgb(237 238 242);
+        text-align: center;
+    }
+
+    th, td {
+        border: 1px solid rgb(237 238 242);
+        padding: 8px 10px;
+        text-align: center;
+    }
+
+    td:last-of-type {
+        text-align: center;
+    }
+
+    tbody > tr:nth-of-type(even) {
+        background-color: rgb(237 238 242);
+    }
+    .product-description ul li {
+        list-style-type: disc !important;
+        list-style: inside !important;
+    }
+</style>
+<div class="product-description offset-top-20" itemprop="description">
+    <div class="content-product" style="margin-top: 30px;"> 
+        <div class="grid-area"> 
+            <div> <img src="${image1}" style="width: 100%; height: auto; display: block; max-width: 450px; margin: 0 auto;"> </div> 
+            <div style="padding: 20px;">
+                <h3 style="text-align: center; color: #1c1c1c; margin-top: 20px;"> <strong>${title}</strong> </h3> 
+                <p style="margin:10px; text-align: center; font-size: 13px;"> ${description} </p>
+            </div> 
+        </div> 
+        <div class="grid-area"> 
+            <div class="order1"> 
+                <h3 style="text-align: center; color: #1c1c1c; margin-top: 20px;"> <strong>Informações Técnicas</strong> </h3> 
+                <ul style="margin:10px; font-size: 13px;"> 
+                    ${infoTecnicas}
+                </ul>
+            </div> 
+            <div> <img src="${image2}" style="width: 100%; height: auto; display: block; max-width: 450px; margin: 0 auto;"> </div> 
+        </div> 
+        <div class="grid-area"> 
+            <div> <img src="${image3}" style="width: 100%; height: auto; display: block; max-width: 450px; margin: 0 auto;"> </div> 
+            <div style="padding: 20px;"> 
+                <img src="https://img.irroba.com.br/vittieuo/catalog/irroba/hanger.png" style="height: auto; display: block; max-width: 100px; margin: 0 auto;">
+                <h3 style="text-align: center; color: #1c1c1c; margin-top: 20px;"> <strong>Detalhes do Produto</strong> </h3>
+                <ul style="margin:10px; font-size: 13px;">
+                    ${porqueApostar}
+                </ul>
+            </div> 
+        </div>
+    </div> 
+</div>
+            `;
+
+            document.getElementById('generated-html').value = generatedHTML;
+            document.getElementById('preview-area').innerHTML = generatedHTML;
+        }
+
+        document.getElementById('preview-html').addEventListener('click', generateHTML);
+        document.getElementById('generate-html').addEventListener('click', generateHTML);
+
+        document.getElementById('copy-html').addEventListener('click', function() {
+            const generatedHTML = document.getElementById('generated-html');
+            generatedHTML.select();
+            document.execCommand('copy');
+            alert('HTML copiado para a área de transferência!');
+        });
+    </script>
+</body>
+</html>
